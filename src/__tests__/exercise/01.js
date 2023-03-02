@@ -14,16 +14,35 @@ global.IS_REACT_ACT_ENVIRONMENT = true
 test('counter increments and decrements when the buttons are clicked', () => {
   // 🐨 create a div to render your component to (💰 document.createElement)
   //
+
+  const div = document.createElement('div')
   // 🐨 append the div to document.body (💰 document.body.append)
-  //
+  document.body.append(div)
   // 🐨 use createRoot to render the <Counter /> to the div
+  const root = createRoot(div)
+  act(() => root.render(<Counter />))
   // 🐨 get a reference to the increment and decrement buttons:
   //   💰 div.querySelectorAll('button')
+  const [decrement, increment] = div.querySelectorAll('button')
   // 🐨 get a reference to the message div:
   //   💰 div.firstChild.querySelector('div')
+  const message = div.firstChild.querySelector('div')
   //
   // 🐨 expect the message.textContent toBe 'Current count: 0'
   // 🐨 click the increment button (💰 act(() => increment.click()))
+
+  const buttonClick = new MouseEvent('click', {
+    bubbles: true,
+    cancelable: true,
+    button: 0,
+  })
+
+  expect(message.textContent).toBe('Current count: 0')
+  act(() => increment.dispatchEvent(buttonClick))
+  expect(message.textContent).toBe('Current count: 1')
+  act(() => decrement.dispatchEvent(buttonClick))
+  expect(message.textContent).toBe('Current count: 0')
+  div.remove()
   // 🐨 assert the message.textContent
   // 🐨 click the decrement button (💰 act(() => decrement.click()))
   // 🐨 assert the message.textContent
